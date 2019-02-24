@@ -1,11 +1,41 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { fetchProjects } from '../redux'
+import {fetchNewProject} from '../redux'
 import Project from './Project'
 
 class AllProjects extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      title: '',
+      deadline: new Date(),
+      priority: 1,
+      completed: false,
+      description: ''
+    }
+    this.handleChange = this.handleChange.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this)
+  }
+
   componentDidMount() {
     this.props.fetchProjects()
+  }
+
+  async handleSubmit(event) {
+    try {
+      event.preventDefault();
+      alert('A project was submitted: ' + this.state.name);
+      this.props.fetchNewProject(this.state)
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
+  handleChange(event) {
+    this.setState({
+      [event.target.name]: event.target.value
+    })
   }
 
   render() {
@@ -18,6 +48,57 @@ class AllProjects extends React.Component {
           )
           : `Where are the projects???`
         }
+
+
+        <form className="container" onSubmit={this.handleSubmit} >
+          <div>
+            <label>
+              Title:
+          <input value={this.state.title} type='text' name='title' onChange={this.handleChange} />
+            </label>
+          </div>
+
+          {/* <div>
+        <label>
+          Deadline:
+          <DatePicker
+          name="deadline"
+          value={this.state.deadline}
+          type="date"
+        selected={this.state.deadline}
+        onChange={this.handleChange}
+      />
+        </label>
+      </div> */}
+
+          <div>
+            <label>
+              Priority:
+          <input value={this.state.priority} type='number' name='priority' onChange={this.handleChange} />
+            </label>
+          </div>
+
+          <div>
+            <label>
+              Completed:
+          <input
+                name="completed"
+                type="checkbox"
+                checked={this.state.completed}
+                onChange={this.handleChange} />
+            </label>
+          </div>
+
+          <div>
+            <label>
+              Description:
+          <input value={this.state.description} type='text' name='description' onChange={this.handleChange} />
+            </label>
+          </div>
+          <input type="submit" value="Submit" />
+        </form>
+
+
       </div>
     )
   }
@@ -28,7 +109,8 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  fetchProjects: () => dispatch(fetchProjects())
+  fetchProjects: () => dispatch(fetchProjects()),
+  fetchNewProject: (newProject) => dispatch(fetchNewProject(newProject))
 })
 
 

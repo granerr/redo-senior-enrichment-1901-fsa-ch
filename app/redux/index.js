@@ -24,6 +24,7 @@ export const GET_PROJECTS = 'GET_PROJECTS'
 export const GET_ROBOT = 'GET_ROBOT'
 export const GET_PROJECT = 'GET_PROJECT'
 export const ADD_ROBOT = 'ADD_ROBOT'
+export const ADD_PROJECT = 'ADD_PROJECT'
 
 export const getRobots = (robots) => ({
   type: GET_ROBOTS,
@@ -48,6 +49,11 @@ export const getProject = (project) => ({
 export const addRobot = (robot) => ({
   type: ADD_ROBOT,
   robot
+})
+
+export const addProject = (project) => ({
+  type: ADD_PROJECT,
+  project
 })
 
 export const fetchRobots = () => {
@@ -88,6 +94,15 @@ export const fetchNewRobot = (robot) => async dispatch => {
   }
 }
 
+export const fetchNewProject = (project) => async dispatch => {
+  try {
+    const res = await axios.post('/api/projects', project)
+    dispatch(addProject(res.data))
+    fetchProjects()
+  } catch (err) {
+    next(err)
+  }
+}
 const appReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_ROBOTS:
@@ -114,6 +129,11 @@ const appReducer = (state = initialState, action) => {
       return {
         ...state,
         robots: [...state.robots, action.robot]
+      }
+    case ADD_PROJECT:
+      return {
+        ...state,
+        projects: [...state.projects, action.project]
       }
     default:
       return state

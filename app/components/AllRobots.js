@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { fetchRobots } from '../redux'
 import Robot from './Robot'
-import axios from 'axios'
 import { fetchNewRobot } from '../redux'
 
 class AllRobots extends React.Component {
@@ -26,7 +25,6 @@ class AllRobots extends React.Component {
     try {
       event.preventDefault();
       alert('A robot was submitted: ' + this.state.name);
-      // const res = await axios.post('/api/robots', this.state)
       this.props.fetchNewRobot(this.state)
     } catch (err) {
       console.error(err)
@@ -95,12 +93,6 @@ const mapStateToProps = state => ({
   robots: state.robots
 })
 
-const fakeNewRobot = {
-  name: 'fake new robot',
-  fuelType: 'electric',
-  fuelLevel: 100.00,
-  imageUrl: ''
-}
 const mapDispatchToProps = (dispatch) => ({
   fetchRobots: () => dispatch(fetchRobots()),
   fetchNewRobot: (fakeNewRobot) => dispatch(fetchNewRobot(fakeNewRobot))
