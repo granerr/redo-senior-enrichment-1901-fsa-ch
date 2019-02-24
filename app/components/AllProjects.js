@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { fetchProjects } from '../redux'
 import {fetchNewProject} from '../redux'
 import Project from './Project'
+import axios from 'axios'
 
 class AllProjects extends React.Component {
   constructor(props) {
@@ -16,6 +17,7 @@ class AllProjects extends React.Component {
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
+    this.handleDelete = this.handleDelete.bind(this)
   }
 
   componentDidMount() {
@@ -38,13 +40,25 @@ class AllProjects extends React.Component {
     })
   }
 
+  async handleDelete(project) {
+    try {
+      event.preventDefault();
+      alert('A project was deleted');
+      await axios.delete(`/api/projects/${project.id}`)
+      this.props.fetchProjects()
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
   render() {
     return (
       <div>
         {console.log(this.props)}
         {(this.props.projects && this.props.projects.length)
           ? this.props.projects.map(project =>
-            <Project key={project.id} project={project} />
+            <Project key={project.id} project={project} handleDelete={() =>
+              this.handleDelete(project)}/>
           )
           : `Where are the projects???`
         }
@@ -110,7 +124,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = (dispatch) => ({
   fetchProjects: () => dispatch(fetchProjects()),
-  fetchNewProject: (newProject) => dispatch(fetchNewProject(newProject))
+  fetchNewProject: (newProject) => dispatch(fetchNewProject(newProject)),
+  deleteRobot: (projectToDelete) => dispatch(deleteRobot(projectToDelete))
 })
 
 

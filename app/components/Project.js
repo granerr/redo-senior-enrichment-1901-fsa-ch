@@ -8,6 +8,9 @@ export const Project = (props) => {
       <br />
       Title: <Link to={`/projects/${project.id}`}>{project.title}
       </Link>
+      <button onClick={props.handleDelete}>
+        X
+      </button>
       <br />
       Deadline: {project.deadline}
       <br />

@@ -25,6 +25,7 @@ export const GET_ROBOT = 'GET_ROBOT'
 export const GET_PROJECT = 'GET_PROJECT'
 export const ADD_ROBOT = 'ADD_ROBOT'
 export const ADD_PROJECT = 'ADD_PROJECT'
+// export const DELETE_ROBOT = 'DELETE_ROBOT'
 
 export const getRobots = (robots) => ({
   type: GET_ROBOTS,
@@ -55,6 +56,11 @@ export const addProject = (project) => ({
   type: ADD_PROJECT,
   project
 })
+
+// export const deletedRobot = (robot) => ({
+//   type: DELETE_ROBOT,
+//   robot
+// })
 
 export const fetchRobots = () => {
   return async (dispatch, getState) => {
@@ -103,6 +109,14 @@ export const fetchNewProject = (project) => async dispatch => {
     next(err)
   }
 }
+
+// export const deleteRobot = (robot) => {
+//   return async (dispatch, getState) => {
+//     const { data } = await axios.delete(`/api/robots/${robot.id}`)
+//     dispatch(deletedRobot(robot.data))
+//   }
+// }
+
 const appReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_ROBOTS:
@@ -135,6 +149,11 @@ const appReducer = (state = initialState, action) => {
         ...state,
         projects: [...state.projects, action.project]
       }
+    // case DELETE_ROBOT:
+    //   return {
+    //     ...state,
+    //     robots: [...state.robots.filter(robot.id === action.robot.id)]
+    //   }
     default:
       return state
   }

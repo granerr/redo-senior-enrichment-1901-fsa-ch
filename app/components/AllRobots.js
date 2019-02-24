@@ -2,7 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { fetchRobots } from '../redux'
 import Robot from './Robot'
-import { fetchNewRobot } from '../redux'
+import { fetchNewRobot, deleteRobot } from '../redux'
+import axios from 'axios'
 
 class AllRobots extends React.Component {
   constructor(props) {
@@ -15,6 +16,7 @@ class AllRobots extends React.Component {
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
+    this.handleDelete = this.handleDelete.bind(this)
   }
 
   componentDidMount () {
@@ -37,15 +39,28 @@ class AllRobots extends React.Component {
     })
   }
 
+  async handleDelete(robot) {
+    try {
+      event.preventDefault();
+      alert('A robot was deleted');
+      // await this.props.deleteRobot(robot)
+      await axios.delete(`/api/robots/${robot.id}`)
+      this.props.fetchRobots()
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
   render() {
     return (
       <div>
         {(this.props.robots && this.props.robots.length)
           ? this.props.robots.map(robot =>
-            <Robot key={robot.id} robot={robot} />
-          )
-          : `Where are the robots???`
-        }
+            <Robot key={robot.id} robot={robot} handleDelete={() =>
+              this.handleDelete(robot)}/>
+      )
+      : `Where are the robots???`
+    }
 
 
 
@@ -95,7 +110,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = (dispatch) => ({
   fetchRobots: () => dispatch(fetchRobots()),
-  fetchNewRobot: (fakeNewRobot) => dispatch(fetchNewRobot(fakeNewRobot))
+  fetchNewRobot: (newRobot) => dispatch(fetchNewRobot(newRobot)),
+  deleteRobot: (robotToDelete) => dispatch(deleteRobot(robotToDelete))
 })
 
 // export default withRouter(connect(mapStateToProps, mapDispatchToProps)(AllRobots))
