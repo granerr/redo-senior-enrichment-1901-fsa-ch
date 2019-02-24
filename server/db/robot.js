@@ -14,12 +14,14 @@ const Robot = db.define('robot', {
   },
   fuelType: {
     type: Sequelize.STRING,
+    defaultValue: 'electric',
     validate: {
       isIn: [['gas', 'diesel', 'electric']]
     }
   },
   fuelLevel: {
     type: Sequelize.DECIMAL,
+    defaultValue: 100,
     validate: { min: 0, max: 100 }
   },
   imageUrl: {

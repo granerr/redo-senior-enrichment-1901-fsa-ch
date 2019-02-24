@@ -66,11 +66,14 @@ router.get('/projects/:projectId', async (req, res, next) => {
     const projectId = req.params.projectId
     const data = await Project.findById(projectId,
       {
-        include: [{
-          model: Robot,
-          through: 'ProjectTeam'
-        }]
+        include: [{ model: Robot }]
       })
+      // {
+      //   include: [{
+      //     model: Robot,
+      //     through: 'ProjectTeam'
+      //   }]
+      // })
     res.json(data)
   } catch (err) {
     next(err)
